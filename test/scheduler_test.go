@@ -8,7 +8,7 @@ import (
 	"oncall-duty/internal/scheduler"
 )
 
-// Testa se um participante indisponível é realmente filtrado
+// Testa se um participante indisponível é realmente filtrado (gerado pelo HubAI)
 func TestFilterAvailableParticipants_Indisponivel(t *testing.T) {
 	layout := model.Layout
 	date, _ := time.Parse(layout, "20-10-2025")
@@ -28,7 +28,7 @@ func TestFilterAvailableParticipants_Indisponivel(t *testing.T) {
 	}
 }
 
-// Testa se maxDiff nunca é excedido para um candidato
+// Testa se maxDiff nunca é excedido para um candidato (gerado pelo HubAI)
 func TestMaxDiffNeverExceeded(t *testing.T) {
 	participants := []*model.Participant{
 		{Name: "A", TotalHours: 10},

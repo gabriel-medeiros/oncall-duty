@@ -102,12 +102,12 @@ func WriteScheduleFile(duties []model.Duty, filename string) error {
 	return nil
 }
 
-// Função pública de apoio para testes
+// Help with tests
 func TestFilterAvailable(participants []*model.Participant, duty model.Duty, descansoDias int) []*model.Participant {
 	return filterAvailable(participants, duty, descansoDias)
 }
 
-// Função pública de apoio para testes
+// Help with tests
 func TestGetMinMaxHours(participants []*model.Participant, candidate *model.Participant, addHours int) (int, int) {
 	return util.GetMinMaxHours(participants, candidate, addHours)
 }
