@@ -1,4 +1,4 @@
-# oncall-duty
+# Oncall Duty
 Serviço responsável pela geração automatizada de escalas de plantão e sobreaviso
 
 ## How to run
@@ -10,7 +10,7 @@ Serviço responsável pela geração automatizada de escalas de plantão e sobre
 
 Obs: the data format is DD-MM-YYYY
 
-## Participants File
+## Participants file
 
 O arquivo que contém os participantes deve seguir esse formato:
 
