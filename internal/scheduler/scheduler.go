@@ -66,17 +66,46 @@ func GenerateSchedule(participants []*model.Participant, startDate, endDate time
 }
 
 func filterAvailable(participants []*model.Participant, duty model.Duty, descansoDias int) []*model.Participant {
-	var result []*model.Participant
+	var available []*model.Participant
+	layout := model.Layout
+	dutyDate := duty.Date
+
 	for _, p := range participants {
-		if p.Unavailable[duty.Date.Format(model.Layout)] {
-			continue
+		u := p.Unavailability
+
+		// 🚫 Dias fixos da semana
+		for _, day := range u.WeekDays {
+			if day == dutyDate.Weekday() {
+				goto nextParticipant
+			}
 		}
-		if !p.LastDutyDate.IsZero() && p.LastDutyDate.AddDate(0, 0, descansoDias).Equal(duty.Date) {
-			continue
+
+		// 🚫 Datas específicas
+		for _, s := range u.SpecificDays {
+			if s == dutyDate.Format(layout) {
+				goto nextParticipant
+			}
 		}
-		result = append(result, p)
+
+		// 🚫 Períodos completos
+		for _, r := range u.Ranges {
+			start, _ := time.Parse(layout, r.Start)
+			end, _ := time.Parse(layout, r.End)
+			if !dutyDate.Before(start) && !dutyDate.After(end) {
+				goto nextParticipant
+			}
+		}
+
+		// ⏳ Regra de descanso
+		if !p.LastDutyDate.IsZero() && dutyDate.Sub(p.LastDutyDate).Hours() < float64(descansoDias*24) {
+			goto nextParticipant
+		}
+
+		available = append(available, p)
+
+	nextParticipant:
 	}
-	return result
+	return available
 }
 
 func WriteScheduleFile(duties []model.Duty, filename string) error {
