@@ -16,7 +16,7 @@ const layout = "02-01-2006"
 func main() {
 	startStr := flag.String("inicio", "", "Data inicial no formato DD-MM-YYYY")
 	endStr := flag.String("fim", "", "Data final no formato DD-MM-YYYY")
-	jsonFile := flag.String("participantes", "participantes.json", "Arquivo JSON com participantes")
+	jsonFile := flag.String("participants", "participants.json", "Arquivo JSON com participantes")
 	configFile := flag.String("config", "config.json", "Arquivo JSON com configuração")
 	debug := flag.Bool("debug", false, "Exibir logs detalhados")
 	flag.Parse()
