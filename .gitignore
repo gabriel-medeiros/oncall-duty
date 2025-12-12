@@ -31,5 +31,5 @@ go.work.sum
 # .idea/
 # .vscode/
 
-participantes.json
+config/participantes.json
 plantao.txt

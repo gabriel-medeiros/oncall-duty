@@ -8,29 +8,27 @@ import (
 	"time"
 
 	"oncall-duty/config"
-	"oncall-duty/internal/model"
-	"oncall-duty/internal/util"
 )
 
-func GenerateSchedule(participants []*model.Participant, startDate, endDate time.Time, cfg config.Config, debug bool) []model.Duty {
+func GenerateSchedule(participants []*Participant, startDate, endDate time.Time, cfg config.Config, debug bool) []Duty {
 	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(participants), func(i, j int) {
 		participants[i], participants[j] = participants[j], participants[i]
 	})
 
-	var duties []model.Duty
+	var duties []Duty
 	for d := startDate; !d.After(endDate); d = d.AddDate(0, 0, 1) {
 		hours := 15
 		if d.Weekday() == time.Saturday || d.Weekday() == time.Sunday {
 			hours = 24
 		}
-		duties = append(duties, model.Duty{Date: d, Hours: hours})
+		duties = append(duties, Duty{Date: d, Hours: hours})
 	}
 
 	for i := range duties {
 		available := filterAvailable(participants, duties[i], cfg.DescansoDias)
 		if len(available) == 0 {
-			panic(fmt.Sprintf("Nenhum participante disponível para %s", duties[i].Date.Format(model.Layout)))
+			panic(fmt.Sprintf("Nenhum participante disponível para %s", duties[i].Date.Format(Layout)))
 		}
 
 		sort.Slice(available, func(i, j int) bool {
@@ -40,9 +38,9 @@ func GenerateSchedule(participants []*model.Participant, startDate, endDate time
 			return available[i].TotalHours < available[j].TotalHours
 		})
 
-		var chosen *model.Participant
+		var chosen *Participant
 		for _, candidate := range available {
-			minHours, maxHours := util.GetMinMaxHours(participants, candidate, duties[i].Hours)
+			minHours, maxHours := GetMinMaxHours(participants, candidate, duties[i].Hours)
 			if maxHours-minHours <= cfg.MaxDiff {
 				chosen = candidate
 				break
@@ -58,16 +56,16 @@ func GenerateSchedule(participants []*model.Participant, startDate, endDate time
 		duties[i].Who = chosen.Name
 
 		if debug {
-			fmt.Printf("[DEBUG] Escolhido: %s para %s (%dh), Total: %dh\n", chosen.Name, duties[i].Date.Format(model.Layout), duties[i].Hours, chosen.TotalHours)
+			fmt.Printf("[DEBUG] Escolhido: %s para %s (%dh), Total: %dh\n", chosen.Name, duties[i].Date.Format(Layout), duties[i].Hours, chosen.TotalHours)
 		}
 	}
 
 	return duties
 }
 
-func filterAvailable(participants []*model.Participant, duty model.Duty, descansoDias int) []*model.Participant {
-	var available []*model.Participant
-	layout := model.Layout
+func filterAvailable(participants []*Participant, duty Duty, descansoDias int) []*Participant {
+	var available []*Participant
+	layout := Layout
 	dutyDate := duty.Date
 
 	for _, p := range participants {
@@ -108,7 +106,7 @@ func filterAvailable(participants []*model.Participant, duty model.Duty, descans
 	return available
 }
 
-func WriteScheduleFile(duties []model.Duty, filename string) error {
+func WriteScheduleFile(duties []Duty, filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
@@ -117,12 +115,12 @@ func WriteScheduleFile(duties []model.Duty, filename string) error {
 
 	for _, duty := range duties {
 		line := fmt.Sprintf("%s - %s - %s (%dh) - %s|%s\n",
-			duty.Date.Format(model.Layout),
-			duty.Date.AddDate(0, 0, 1).Format(model.Layout),
+			duty.Date.Format(Layout),
+			duty.Date.AddDate(0, 0, 1).Format(Layout),
 			duty.Who,
 			duty.Hours,
-			util.GetWeekdayPt(duty.Date.Weekday()),
-			util.GetWeekdayPt(duty.Date.AddDate(0, 0, 1).Weekday()))
+			GetWeekdayPt(duty.Date.Weekday()),
+			GetWeekdayPt(duty.Date.AddDate(0, 0, 1).Weekday()))
 		_, err := file.WriteString(line)
 		if err != nil {
 			return err
@@ -131,12 +129,49 @@ func WriteScheduleFile(duties []model.Duty, filename string) error {
 	return nil
 }
 
+func GetMinMaxHours(participants []*Participant, candidate *Participant, addHours int) (int, int) {
+	min, max := 999999, 0
+	for _, p := range participants {
+		h := p.TotalHours
+		if p == candidate {
+			h += addHours
+		}
+		if h < min {
+			min = h
+		}
+		if h > max {
+			max = h
+		}
+	}
+	return min, max
+}
+
+func GetWeekdayPt(wd time.Weekday) string {
+	switch wd {
+	case time.Sunday:
+		return "domingo"
+	case time.Monday:
+		return "segunda"
+	case time.Tuesday:
+		return "terça"
+	case time.Wednesday:
+		return "quarta"
+	case time.Thursday:
+		return "quinta"
+	case time.Friday:
+		return "sexta"
+	case time.Saturday:
+		return "sábado"
+	}
+	return ""
+}
+
 // Help with tests
-func TestFilterAvailable(participants []*model.Participant, duty model.Duty, descansoDias int) []*model.Participant {
+func TestFilterAvailable(participants []*Participant, duty Duty, descansoDias int) []*Participant {
 	return filterAvailable(participants, duty, descansoDias)
 }
 
 // Help with tests
-func TestGetMinMaxHours(participants []*model.Participant, candidate *model.Participant, addHours int) (int, int) {
-	return util.GetMinMaxHours(participants, candidate, addHours)
+func TestGetMinMaxHours(participants []*Participant, candidate *Participant, addHours int) (int, int) {
+	return GetMinMaxHours(participants, candidate, addHours)
 }

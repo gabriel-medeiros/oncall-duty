@@ -7,8 +7,7 @@ import (
 	"time"
 
 	"oncall-duty/config"
-	"oncall-duty/internal/model"
-	"oncall-duty/internal/scheduler"
+	"oncall-duty/scheduler"
 )
 
 const layout = "02-01-2006"
@@ -39,7 +38,7 @@ func main() {
 		log.Fatalf("Erro ao carregar configuração: %v", err)
 	}
 
-	participants, err := model.LoadParticipants(*jsonFile)
+	participants, err := scheduler.LoadParticipants(*jsonFile)
 	if err != nil {
 		log.Fatalf("Erro ao carregar participantes: %v", err)
 	}

@@ -1,0 +1,110 @@
+[
+  {
+    "name": "Anna Aureliano",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [
+        { "start": "28-11-2025", "end": "09-12-2025" }
+      ],
+      "week_days": []
+    }
+  },
+  {
+    "name": "Bruno Ventura",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [],
+      "week_days": [0]
+    }
+  },
+  {
+    "name": "Carlos Montezano",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [
+        { "start": "20-11-2025", "end": "14-12-2025" }
+      ],
+      "week_days": []
+    }
+  },
+  {
+    "name": "Cesar Rodrigues",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [],
+      "week_days": [0,6]
+    }
+  },
+  {
+    "name": "João Lucas",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [],
+      "week_days": [0]
+    }
+  },
+  {
+    "name": "Leonardo Neves",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [],
+      "week_days": [0,6]
+    }
+  },
+  {
+    "name": "Gabriel Medeiros",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [
+        { "start": "05-12-2025", "end": "07-12-2025" }
+      ],
+      "week_days": []
+    }
+  },
+  {
+    "name": "Lucas Henrique",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [
+        { "start": "20-11-2025", "end": "22-11-2025" }
+      ],
+      "week_days": [2]
+    }
+  },
+  {
+    "name": "Lucas Lopes",
+    "unavailability": {
+      "specific_days": ["15-11-2025", "16-11-2025"],
+      "ranges": [],
+      "week_days": []
+    }
+  },
+  {
+    "name": "Nicolas Pereira",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [
+        { "start": "10-11-2025", "end": "19-11-2025" }
+      ],
+      "week_days": [5]
+    }
+  },
+  {
+    "name": "Rafael Leme",
+    "unavailability": {
+      "specific_days": ["20-11-2025"],
+      "ranges": [],
+      "week_days": []
+    }
+  },
+  {
+    "name": "Joao Tonani",
+    "unavailability": {
+      "specific_days": [],
+      "ranges": [
+        { "start": "02-12-2025", "end": "04-12-2025" }
+      ],
+      "week_days": [6]
+    }
+  }
+]
